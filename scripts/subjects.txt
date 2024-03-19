@@ -1,0 +1,100 @@
+Farm
+Mountains
+Beach
+At the Hotel
+City Life
+Countryside
+School
+University
+Office
+Restaurant
+Supermarket
+Bakery
+Coffee Shop
+Airport
+Train Station
+Bus Terminal
+Harbor
+Museum
+Art Gallery
+Cinema
+Theater
+Concert Hall
+Library
+Bookstore
+Park
+Zoo
+Aquarium
+Amusement Park
+Gym
+Sports Field
+Swimming Pool
+Beach
+Camping
+Hiking Trail
+Ski Resort
+Hospital
+Pharmacy
+Doctor's Office
+Dentist's Office
+Police Station
+Fire Station
+Post Office
+Bank
+Hotel
+Hostel
+Apartment
+House
+School
+University
+Office Building
+Factory
+Farm
+Forest
+River
+Lake
+Sea
+Ocean
+Mountain Range
+Desert
+Island
+National Park
+Garden
+Vineyard
+Marketplace
+Shopping Mall
+Clothing Store
+Electronics Store
+Furniture Store
+Pet Shop
+Hair Salon
+Beauty Salon
+Spa
+Tattoo Parlor
+Nightclub
+Bar
+Pub
+Winery
+Brewery
+Fast Food Restaurant
+Fine Dining Restaurant
+Buffet
+Café
+Tea House
+Bakery
+Deli
+Food Truck
+Street Market
+Book Fair
+Art Exhibition
+Music Festival
+Film Festival
+Theater Performance
+Dance Performance
+Opera
+Ballet
+Circus
+Magic Show
+Comedy Club
+Lecture Hall
+Conference Center
