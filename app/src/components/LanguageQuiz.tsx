@@ -113,6 +113,10 @@ const LanguageQuiz = ({ domain }: LanguageQuizProps) => {
               secondary
             />
           </div>
+          <p className="mt-8 self-end">
+            number of solved problems:{" "}
+            {problems.filter((p) => p.answered === 1).length}
+          </p>
         </>
       ) : (
         <p>Loading...</p>

@@ -1,9 +1,30 @@
 #!/bin/bash
 
-# DB
-# Assuming your script and the /db directory are in the same parent directory
+# Default
+MODE="close"
+URL="http://localhost:3000" # Default URL
+THRESHOLD=3 # Set the threshold for command execution time in seconds
+APP_DIR="./app"
 DB_DIR="./db"
 DB_FILE="$DB_DIR/mydatabase.db"
+
+# Iterate over all arguments
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --notify) MODE="notify"; shift ;;
+        --close) MODE="close"; shift ;;
+        --url) URL="$2"; shift 2 ;;
+        --threshold) THRESHOLD="$2"; shift 2 ;;
+        *) echo "Unknown option: $1"; exit 1 ;;
+    esac
+done
+
+echo "Mode: $MODE"
+echo "URL: $URL"
+echo "Threshold: $THRESHOLD"
+
+
+############ Functions ############
 
 # Function to initialize the database
 initialize_db() {
@@ -40,35 +61,6 @@ EOF
     popd > /dev/null
 }
 
-# Check if the database file exists and initialize if not
-if [ ! -f "$DB_FILE" ]; then
-    initialize_db
-else
-    echo "Database already initialized."
-fi
-
-
-# Set the threshold for command execution time in seconds
-THRESHOLD=3
-
-# Capture the TTY of the current terminal
-CURRENT_TTY=$(tty)
-
-# Default behavior is to close the window
-MODE="close"
-
-# Check for --notify argument to change mode
-if [ "$1" == "--notify" ]; then
-    MODE="notify"
-fi
-
-# Capture the script's own Process Group ID (PGID)
-SCRIPT_PGID=$(ps -o pgid= $$ | grep -o '[0-9]*')
-
-
-# Path to your React app
-APP_DIR="./app"
-
 # Function to start the React app server
 start_app() {
     echo "Starting React and Node app..."
@@ -83,7 +75,7 @@ start_app() {
 
     # Starting the Node.js server
     pushd "server" > /dev/null
-    node server.js &
+    node server.js > /dev/null 2>&1 &
     SERVER_PID=$!
     popd > /dev/null
 }
@@ -102,12 +94,29 @@ stop_app() {
     fi
 }
 
-# Trap script termination signals to clean up
-trap stop_app EXIT
+############ Main Script ############
 
-# Start the app
-start_app
+# Capture the TTY of the current terminal
+CURRENT_TTY=$(tty)
 
+# Capture the script's own Process Group ID (PGID)
+SCRIPT_PGID=$(ps -o pgid= $$ | grep -o '[0-9]*')
+
+
+# If URL is the default, open the whole db server react
+if [ "$URL" == "http://localhost:3000" ]; then
+    # Check if the database file exists and initialize if not
+    if [ ! -f "$DB_FILE" ]; then
+        initialize_db
+    else
+        echo "Database already initialized."
+    fi
+    # Trap script termination signals to clean up
+    trap stop_app EXIT
+
+    # Start the app
+    start_app
+fi
 
 # Infinite loop to continuously check running processes
 while true; do
@@ -130,7 +139,7 @@ while true; do
             echo "Elapsed time: $etime"
             echo "Total seconds: $total_seconds"
 
-            osascript -e 'tell application "Google Chrome" to tell (make new window) to set URL of active tab to "http://localhost:3000"'
+            osascript -e 'tell application "Google Chrome" to tell (make new window) to set URL of active tab to "'$URL'"'
 
             echo "$(ps -p $pid)"
 
@@ -140,11 +149,10 @@ while true; do
             done
 
             if [ "$MODE" == "close" ]; then
-                osascript -e 'tell application "Google Chrome" to close (tabs of window 1 whose URL contains "localhost:3000")'
+                osascript -e 'tell application "Google Chrome" to close (tabs of window 1 whose URL contains "'$URL'")'
             elif [ "$MODE" == "notify" ]; then
                 osascript -e 'display notification "Command finished" with title "CMD Learn"'
             fi
-
         fi
     done
     sleep 1 # Wait a bit before checking again to reduce system load
