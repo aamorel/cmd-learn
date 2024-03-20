@@ -11,7 +11,7 @@ export default function ChooseDomain({
 }: ChooseDomainProps) {
   return (
     <div className="flex flex-col items-center justify-center p-4">
-      <h1 className="text-xl font-bold mb-4">Choose a domain</h1>
+      <h1 className="text-xl font-bold mb-4">choose a domain</h1>
       <div className="mb-4 flex flex-col space-y-4">
         {possibleDomains.map((domain: Domain, index: number) => (
           <Button

@@ -9,7 +9,7 @@ export default function Button({ text, onClick, secondary }: ButtonProps) {
     return (
       <button
         onClick={onClick}
-        className="p-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white"
+        className="p-2 rounded-lg bg-secondary-100 hover:opacity-70 text-white"
       >
         {text}
       </button>

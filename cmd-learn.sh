@@ -7,17 +7,33 @@ THRESHOLD=3 # Set the threshold for command execution time in seconds
 APP_DIR="./app"
 DB_DIR="./db"
 DB_FILE="$DB_DIR/mydatabase.db"
+LAUNCH_OPTION="" # Tracks which launch option is selected
+
 
 # Iterate over all arguments
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        --notify) MODE="notify"; shift ;;
-        --close) MODE="close"; shift ;;
-        --url) URL="$2"; shift 2 ;;
+        --app) LAUNCH_OPTION="app"; shift ;;
+        --url) URL="$2"; LAUNCH_OPTION="url"; shift 2 ;;
+        --random-wiki) URL="https://en.wikipedia.org/wiki/Special:Random"; LAUNCH_OPTION="random-wiki"; MODE="notify"; shift ;;
+
+        --mode) MODE="$2"; shift ;;
         --threshold) THRESHOLD="$2"; shift 2 ;;
         *) echo "Unknown option: $1"; exit 1 ;;
     esac
 done
+
+# Check that one of the required options is provided
+if [ -z "$LAUNCH_OPTION" ]; then
+    echo "Error: You must specify one of --app, --url <url>, or --random-wiki."
+    exit 1
+fi
+
+# Check that MODE is either close, notify or closeandnotify
+if [ "$MODE" != "close" ] && [ "$MODE" != "notify" ] && [ "$MODE" != "closeandnotify" ]; then
+    echo "Error: MODE must be either 'close', 'notify' or 'closeandnotify'."
+    exit 1
+fi
 
 echo "Mode: $MODE"
 echo "URL: $URL"
@@ -151,6 +167,9 @@ while true; do
             if [ "$MODE" == "close" ]; then
                 osascript -e 'tell application "Google Chrome" to close (tabs of window 1 whose URL contains "'$URL'")'
             elif [ "$MODE" == "notify" ]; then
+                osascript -e 'display notification "Command finished" with title "CMD Learn"'
+            elif [ "$MODE" == "closeandnotify" ]; then
+                osascript -e 'tell application "Google Chrome" to close (tabs of window 1 whose URL contains "'$URL'")'
                 osascript -e 'display notification "Command finished" with title "CMD Learn"'
             fi
         fi

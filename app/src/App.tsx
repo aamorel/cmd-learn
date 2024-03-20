@@ -43,7 +43,7 @@ function App() {
         />
       ) : (
         <div>
-          <div className="absolute top-12">
+          <div className="absolute top-16">
             <p>
               {domain.domain} - {domain.category}
             </p>

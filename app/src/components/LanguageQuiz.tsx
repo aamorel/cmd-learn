@@ -5,6 +5,7 @@ import {
   tickProblemAsAnswered,
 } from "../dbUtils";
 import Button from "./Button";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface LanguageQuizProps {
   domain: Domain;
@@ -18,6 +19,8 @@ const LanguageQuiz = ({ domain }: LanguageQuizProps) => {
     []
   );
   const [problems, setProblems] = useState<Problem[]>([]);
+  const [wrongAnswer, setWrongAnswer] = useState<boolean>(false);
+  const [rightAnswer, setRightAnswer] = useState<boolean>(false);
 
   const nbOfHints = useRef<number>(0);
 
@@ -57,8 +60,15 @@ const LanguageQuiz = ({ domain }: LanguageQuizProps) => {
         });
         setProblems(newProblems);
         nbOfHints.current = 0;
+        setRightAnswer(true);
+        setTimeout(() => {
+          setRightAnswer(false);
+        }, 2000);
       } else {
-        alert("Wrong answer, try again!");
+        setWrongAnswer(true);
+        setTimeout(() => {
+          setWrongAnswer(false);
+        }, 2000);
       }
     }
   };
@@ -82,22 +92,35 @@ const LanguageQuiz = ({ domain }: LanguageQuizProps) => {
               secondary
             />
           </div>
+          <AnimatePresence>
+            {rightAnswer && (
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="text-green-500 absolute"
+              >
+                correct!
+              </motion.p>
+            )}
+          </AnimatePresence>
 
           <p className="text-lg mb-2 mt-32">
             {currentProblem.description.toLocaleLowerCase()}
           </p>
+
           <input
             type="text"
             value={userTranslation.toLocaleLowerCase()}
             onChange={(e) => setUserTranslation(e.target.value)}
-            className="p-2 border border-gray-300 rounded-lg w-2/3 text-black"
+            className="p-2 border border-gray-300 rounded-lg w-2/3 text-black focus:outline-none"
             onKeyDown={
               // Listen for Enter key
               (e) => e.key === "Enter" && submitAnswer()
             }
           />
-          <div className="flex space-x-2 mt-2">
-            <Button onClick={submitAnswer} text="Submit" />
+          <div className="flex space-x-2 mt-2 relative">
+            <Button onClick={submitAnswer} text="check" />
             <Button
               onClick={() => {
                 nbOfHints.current += 1;
@@ -109,11 +132,12 @@ const LanguageQuiz = ({ domain }: LanguageQuizProps) => {
                 const hint = words.slice(0, nbOfHints.current).join(" ");
                 setUserTranslation(hint);
               }}
-              text="Hint"
+              text="hint"
               secondary
             />
           </div>
-          <p className="mt-8 self-end">
+          {wrongAnswer && <p className="text-red-500">try again</p>}
+          <p className="absolute bottom-8 left-8">
             number of solved problems:{" "}
             {problems.filter((p) => p.answered === 1).length}
           </p>
