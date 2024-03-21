@@ -125,6 +125,11 @@ The parent script will automatically run all the scripts in the `problems` folde
 
 This is a project for fun. Any idea, comments and critics are welcome. If you want to contribute, feel free to open a PR.
 
-## Todos
+## Ideas
 
-- [ ] Add instructions to put in rc file.
+- Add instructions to put in rc file.
+- Add a difficulty parameter to the problems.
+- Add more domains and more problems.
+- Port it to Linux and Windows.
+- More gamification features.
+- Online db for social features.

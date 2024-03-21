@@ -40,9 +40,9 @@ if [ "$MODE" != "close" ] && [ "$MODE" != "notify" ] && [ "$MODE" != "closeandno
     exit 1
 fi
 
-echo "Mode: $MODE"
-echo "URL: $URL"
-echo "Threshold: $THRESHOLD"
+# echo "Mode: $MODE"
+# echo "URL: $URL"
+# echo "Threshold: $THRESHOLD"
 
 
 ############ Functions ############
@@ -84,7 +84,7 @@ EOF
 
 # Function to start the React app server
 start_app() {
-    echo "Starting React and Node app..."
+    # echo "Starting React and Node app..."
     # Change to the app directory
     pushd "$APP_DIR" > /dev/null
     # Start the server in the background (whithout opening the browser)
@@ -127,7 +127,8 @@ if [ "$URL" == "http://localhost:3000" ]; then
     if [ ! -f "$DB_FILE" ]; then
         initialize_db
     else
-        echo "Database already initialized."
+        # echo "Database already initialized."
+        :
     fi
     # Trap script termination signals to clean up
     trap stop_app EXIT
@@ -135,6 +136,8 @@ if [ "$URL" == "http://localhost:3000" ]; then
     # Start the app
     start_app
 fi
+
+echo -e "\ncmd-learn now monitors long commands\n"
 
 # Infinite loop to continuously check running processes
 while true; do
