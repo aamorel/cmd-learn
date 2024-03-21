@@ -118,6 +118,7 @@ CURRENT_TTY=$(tty)
 # Capture the script's own Process Group ID (PGID)
 SCRIPT_PGID=$(ps -o pgid= $$ | grep -o '[0-9]*')
 
+declare -a excluded_commands=("login -fp" "-zsh" "-bash")
 
 # If URL is the default, open the whole db server react
 if [ "$URL" == "http://localhost:3000" ]; then
@@ -143,11 +144,15 @@ while true; do
             continue
         fi
 
-        if [[ $command == "login -fp"* ]]; then
-            continue
-        fi
-
-        if [[ $command == "-zsh"* ]]; then
+        # Loop through excluded_commands to see if current command should be skipped
+        skip_command=false
+        for excluded_command in "${excluded_commands[@]}"; do
+            if [[ $command == $excluded_command* ]]; then
+                skip_command=true
+                break
+            fi
+        done
+        if [[ $skip_command == true ]]; then
             continue
         fi
 
