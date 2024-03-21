@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Find the directory containing the current script
+script_dir=$(dirname "$0")
+cd "$script_dir" || exit
+
+
 # Default
 MODE="close"
 URL="http://localhost:3000" # Default URL

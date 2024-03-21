@@ -31,23 +31,33 @@ For now, it's only available for macOS.
 - If using the `cmd-learn-app`:
 
   ```bash
-  chmod +x install.sh
-  ./install.sh
+  chmod +x install
+  ./install
+  ```
+
+- Make the script executable:
+
+  ```bash
+  chmod +x cmd-learn
+  ```
+
+- If you want to add the command to your path, you can add the following line to your `.bashrc` or `.zshrc`:
+
+  ```bash
+  export PATH=$PATH:/path/to/cmd-learn
   ```
 
 ## Launch
 
 ```bash
-chmod +x cmd-learn.sh
-
 # To open random wikipedia articles
-./cmd-learn.sh --random-wiki &
+./cmd-learn --random-wiki &
 
 # To open the cmd learn app
-./cmd-learn.sh --app &
+./cmd-learn --app &
 
 # To open a custom URL
-./cmd-learn.sh --url <url> &
+./cmd-learn --url <url> &
 
 # Example of command that gets caught
 sleep 30
@@ -114,3 +124,7 @@ The parent script will automatically run all the scripts in the `problems` folde
 ## Future work and contributions
 
 This is a project for fun. Any idea, comments and critics are welcome. If you want to contribute, feel free to open a PR.
+
+## Todos
+
+- [ ] Add instructions to put in rc file.
