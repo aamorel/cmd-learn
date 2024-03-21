@@ -112,13 +112,9 @@ stop_app() {
 
 ############ Main Script ############
 
-# Capture the TTY of the current terminal
 CURRENT_TTY=$(tty)
-
-# Capture the script's own Process Group ID (PGID)
 SCRIPT_PGID=$(ps -o pgid= $$ | grep -o '[0-9]*')
-
-declare -a excluded_commands=("login -fp" "-zsh" "-bash")
+SCRIPT_START_TIME=$(date +%s)
 
 # If URL is the default, open the whole db server react
 if [ "$URL" == "http://localhost:3000" ]; then
@@ -137,22 +133,44 @@ fi
 
 # Infinite loop to continuously check running processes
 while true; do
+
     # List processes, filtering out the script's PGID and matching the current TTY
     ps -eo tty,pgid,pid,etime,command | grep `echo $CURRENT_TTY | cut -d'/' -f3` | grep -v $SCRIPT_PGID | while read tty pgid pid etime command; do
         # Skip lines that don't match a process or match the shell process
-        if [[ ! $tty || ! $pgid || ! $pid || ! $etime || $command == *"/bin/zsh -il"* ]]; then
+        if [[ ! $tty || ! $pgid || ! $pid || ! $etime ]]; then
             continue
         fi
 
-        # Loop through excluded_commands to see if current command should be skipped
-        skip_command=false
-        for excluded_command in "${excluded_commands[@]}"; do
-            if [[ $command == $excluded_command* ]]; then
-                skip_command=true
-                break
-            fi
-        done
-        if [[ $skip_command == true ]]; then
+        # Use the current time and the script start time to decide if the process is too new
+        CURRENT_TIME=$(date +%s)
+        SCRIPT_ELAPSED_TIME=$((CURRENT_TIME - SCRIPT_START_TIME))
+        
+        # Assuming processes starting within the first few seconds might be too new
+        if [ "$SCRIPT_ELAPSED_TIME" -lt 2 ]; then
+            echo "Skipping process $pid: $command (too new)"
+            continue
+        fi
+
+        # Convert etime to total seconds.
+        # etime format can be either [[dd-]hh:]mm:ss or mm:ss, so we need to handle both cases.
+        IFS="-" read days rest <<< "$etime"
+        if [[ $rest ]]; then
+            # days are specified
+            IFS=":" read hours minutes seconds <<< "$rest"
+        else
+            IFS=":" read hours minutes seconds <<< "$days"
+            days=0
+            [[ ! $seconds ]] && { seconds=$minutes; minutes=$hours; hours=0; } # Shift if mm:ss format
+        fi
+        days=${days:-0}
+        hours=${hours:-0}
+        minutes=${minutes:-0}
+        seconds=${seconds:-0}
+        TOTAL_SECONDS=$(( (days*24*60*60) + (hours*60*60) + (minutes*60) + seconds ))
+
+        # Skip processes where the elapsed time is greater than the script's elapsed time.
+        if [ "$TOTAL_SECONDS" -gt "$SCRIPT_ELAPSED_TIME" ]; then
+            echo "Skipping process $pid: $command (too old)"
             continue
         fi
 
