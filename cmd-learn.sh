@@ -147,7 +147,7 @@ while true; do
         
         # Assuming processes starting within the first few seconds might be too new
         if [ "$SCRIPT_ELAPSED_TIME" -lt 2 ]; then
-            echo "Skipping process $pid: $command (too new)"
+            # echo "Skipping process $pid: $command (too new)"
             continue
         fi
 
@@ -170,7 +170,7 @@ while true; do
 
         # Skip processes where the elapsed time is greater than the script's elapsed time.
         if [ "$TOTAL_SECONDS" -gt "$SCRIPT_ELAPSED_TIME" ]; then
-            echo "Skipping process $pid: $command (too old)"
+            # echo "Skipping process $pid: $command (too old)"
             continue
         fi
 
