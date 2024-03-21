@@ -1,6 +1,6 @@
 # `cmd-learn`
 
-![](/app/public/logo.svg)
+![](/app/public/logo.png)
 
 `cmd-learn` is a tool that helps you make use of your time while waiting for a command to finish.
 
