@@ -166,7 +166,7 @@ while true; do
         hours=${hours:-0}
         minutes=${minutes:-0}
         seconds=${seconds:-0}
-        TOTAL_SECONDS=$(( (days*24*60*60) + (hours*60*60) + (minutes*60) + seconds ))
+        TOTAL_SECONDS=$(( (10#$days*24*60*60) + (10#$hours*60*60) + (10#$minutes*60) + 10#$seconds ))
 
         # Skip processes where the elapsed time is greater than the script's elapsed time.
         if [ "$TOTAL_SECONDS" -gt "$SCRIPT_ELAPSED_TIME" ]; then
