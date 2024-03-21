@@ -143,6 +143,14 @@ while true; do
             continue
         fi
 
+        if [[ $command == "login -fp"* ]]; then
+            continue
+        fi
+
+        if [[ $command == "-zsh"* ]]; then
+            continue
+        fi
+
         # Convert elapsed time to total seconds for comparison
         IFS=: read -r minute second <<< "$etime"
         minute=${minute:-0}
