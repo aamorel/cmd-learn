@@ -1,5 +1,7 @@
 # `cmd-learn`
 
+![](/app/public/logo.svg)
+
 `cmd-learn` is a tool that helps you make use of your time while waiting for a command to finish.
 
 - When launched in background in a terminal, it will monitor commands that take a long time (for now based on a threshold, not predictive).
