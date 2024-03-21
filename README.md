@@ -47,6 +47,9 @@ cd ..
 ```bash
 chmod +x cmd-learn.sh
 ./cmd-learn.sh <parameters> &
+
+# Example of command that gets caught
+sleep 30
 ```
 
 This launches the monitoring script in the background.
