@@ -5,7 +5,7 @@
 `cmd-learn` is a tool that helps you make use of your time while waiting for a command to finish.
 
 - When launched in background in a terminal, it will monitor commands that take a long time (for now based on a threshold, not predictive).
-- When such a command is detected, it will open a browser window
+- When such a command is issued in the SAME terminal, it will open a browser window
 - When the command is finished. It can also notify you when the command is finished.
 
 It can open several types of pages:
@@ -28,25 +28,26 @@ For now, it's only available for macOS.
 ## Installation
 
 - Clone the repository
-- If using the `cmd-learn-app`, install the different npm packages:
+- If using the `cmd-learn-app`:
 
-```bash
-cd app
-npm install
-cd ..
-cd problems
-npm install
-cd ..
-cd server
-npm install
-cd ..
-```
+  ```bash
+  chmod +x install.sh
+  ./install.sh
+  ```
 
 ## Launch
 
 ```bash
 chmod +x cmd-learn.sh
-./cmd-learn.sh <parameters> &
+
+# To open random wikipedia articles
+./cmd-learn.sh --random-wiki &
+
+# To open the cmd learn app
+./cmd-learn.sh --app &
+
+# To open a custom URL
+./cmd-learn.sh --url <url> &
 
 # Example of command that gets caught
 sleep 30

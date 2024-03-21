@@ -186,7 +186,7 @@ while true; do
             echo "Elapsed time: $etime"
             echo "Total seconds: $total_seconds"
 
-            osascript -e 'tell application "Google Chrome" to tell (make new window) to set URL of active tab to "'$URL'"'
+            osascript  -e 'tell application "Google Chrome" to tell (make new window) to set URL of active tab to "'$URL'"' -e 'tell application "Google Chrome" to activate'
 
             echo "$(ps -p $pid)"
 
